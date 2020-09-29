@@ -9,8 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "express-graphql": "^0.11.0",
+    "@influxdata/influxdb-client": "^1.6.0",
+    "apollo-server": "^2.18.1",
+    "dotenv": "^8.2.0",
     "graphql": "^15.3.0"
   }
 }
