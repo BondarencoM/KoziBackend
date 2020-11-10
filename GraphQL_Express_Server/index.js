@@ -3,6 +3,7 @@ const { ApolloServer } = require('apollo-server');
 const InfluxDataSource = require('./data_sources/InfluxdbDataSource');
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers')
+const mongoose = require("mongoose");
 
 const INFLUX_CONFIG = {    
   url: process.env.INFLUX_HOST, 
@@ -11,10 +12,21 @@ const INFLUX_CONFIG = {
   bucket: process.env.INFLUX_BUCKET,
 }
 
+const {MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB} = process.env
+
+
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => ({influx: new InfluxDataSource(INFLUX_CONFIG)})
+});
+
+mongoose.connect(`mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@kozi-main.o5ow5.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`, {useNewUrlParser: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('MongoDb connected')
 });
 
 server.listen().then(({ url }) => {

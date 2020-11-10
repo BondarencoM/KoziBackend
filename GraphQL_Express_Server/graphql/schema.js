@@ -10,9 +10,21 @@ type SensorMeasurement{
     humidity: Float!    
 }
 
+scalar Date
+
+type sensorfault {
+    id: ID!
+    loc_x: Int!
+    loc_y: Int!
+    floor: Int!
+    timestamp: Date
+}
+
 type Query {
     MeanClimateMeasurements(start: String, stop: String): [SensorMeasurement]!
+    sensorfaults: [sensorfault!]!
 }
 `
+
 
 module.exports = typeDefs
