@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -12,7 +12,11 @@
     "@influxdata/influxdb-client": "^1.6.0",
     "apollo-server": "^2.18.1",
     "dotenv": "^8.2.0",
-    "graphql": "^15.3.0"
+    "graphql": "^15.3.0",
+    "mongoose": "^5.10.13"
+  },
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^1.2.3",
+    "jest": "^26.6.3"
   }
-  
 }

@@ -12,7 +12,7 @@ type SensorMeasurement{
 
 scalar Date
 
-type sensorfault {
+type SensorFault {
     id: ID!
     loc_x: Int!
     loc_y: Int!
@@ -22,7 +22,7 @@ type sensorfault {
 
 type Query {
     MeanClimateMeasurements(start: String, stop: String): [SensorMeasurement]!
-    sensorfaults: [sensorfault!]!
+    SensorFaults: [SensorFault!]!
 }
 `
 
