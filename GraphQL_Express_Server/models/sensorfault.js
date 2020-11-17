@@ -6,7 +6,7 @@ const sensorFaultSchema = new mongoose.Schema({
     floor: Number,
     timestamp: {
         type: Date,
-        default: Date.now - 1000 * 60 * 60
+        required: true
     }
 });
 
