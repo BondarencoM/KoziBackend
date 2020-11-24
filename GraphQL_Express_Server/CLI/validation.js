@@ -15,7 +15,7 @@ const validateEmail = (input) => {
 
 /**
  * @description Check the input of password
- * @param {Email} input 
+ * @param {Password} input 
  * @returns true if the input is correct otherwise returns the error message
  */
 const validatePassword = (input) => {

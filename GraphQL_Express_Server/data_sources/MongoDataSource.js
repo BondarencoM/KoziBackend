@@ -33,13 +33,14 @@ class MongoDataSource extends DataSource {
      * @description Adds a new user to the MongoDB
      * @param {UserModel} user
      */
-   addUser = (user) => {
-        UserModel.create(user).then(user => {
-            console.log("User added")
-        }).catch(err => {
-            console.log(err)
-        })
-    }
+   addUser(user){
+      return UserModel.create(user).then(user => {
+           console.log("User added")
+       }).catch(err => {
+           console.log("error")
+           console.log(err)
+       })
+   }
 
     /**
      * @description Gets the users from the MongoDB
@@ -48,7 +49,6 @@ class MongoDataSource extends DataSource {
     getUsers(){
         return UserModel.find();
     }
-
 }
 
 

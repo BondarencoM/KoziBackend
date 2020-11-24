@@ -1,4 +1,3 @@
-const inquirer = require('inquirer')
 const {validateEmail,validatePassword} = require('../CLI/validation')
 const commander = require('commander')
 
