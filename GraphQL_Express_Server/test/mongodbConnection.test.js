@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const {
     SensorFault
 } = require('../models/sensorfault')
@@ -96,8 +96,9 @@ test('test of getting user from the mongodb through getUser() method', async () 
     await testUser.save();
 
     const expected = await mongodb.getUsers();
-    expect(expected[0].toObject()).toEqual(testUser.toObject());
     expect(expected[0].toObject()).not.toEqual(randomUser.toObject());
+    expect(expected[0].toObject()).toEqual(testUser.toObject());
+    
 
 });
 
