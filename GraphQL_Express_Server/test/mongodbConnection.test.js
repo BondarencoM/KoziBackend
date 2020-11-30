@@ -72,7 +72,7 @@ test('test of adding user to the mongodb through addUser() method', async () => 
     
 
     await mongodb.addUser(testUser);
-    await mongodb.addUser(randomUser);
+    
   
     const expected = await UserModel.findOne({email: 'test@gmail.com'})
     expect(expected.toObject()).toEqual(testUser.toObject());

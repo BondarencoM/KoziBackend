@@ -15,18 +15,12 @@ const MONGO_CONFIG = {
 }
 let mongodb = new MongoDataSource(MONGO_CONFIG)
 
-
 program.version('1.0.0').description('User Management System')
 
 program.command('add').alias('a').description('Add a user')
-    .action(async () => {
-        const users = await mongodb.getUsers()
-        if (users.length > 0) {
-            console.log("User already added")
-        } else {
-            prompt(questions).then(answers => {
-                mongodb.addUser(answers)
-            });
-        }
+    .action(() => {
+        prompt(questions).then(answers => {
+            mongodb.addUser(answers)
+        });
     });
 program.parse(process.argv)
