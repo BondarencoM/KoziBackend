@@ -3,7 +3,7 @@ const { ApolloServer } = require('apollo-server');
 const InfluxDataSource = require('./data_sources/InfluxdbDataSource');
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers')
-const MongoDataSource = require('./data_sources/mongoDataSource');
+const MongoDataSource = require('./data_sources/MongoDataSource');
 
 const INFLUX_CONFIG = {    
   url: process.env.INFLUX_HOST, 
@@ -28,6 +28,6 @@ const server = new ApolloServer({
   })
 });
 
-server.listen().then(({ url }) => {
+server.listen({port: process.env.PORT || process.env.SERVER_PORT || 4000}).then(({ url }) => {
   console.log(`Server ready at ${url}graphql`);
 });
