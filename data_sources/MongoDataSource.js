@@ -1,6 +1,7 @@
 const { DataSource } = require('apollo-datasource');
 const mongoose = require("mongoose");
-const { SensorFault } = require('../models/sensorfault')
+const { SensorFault } = require('../models/sensorfault');
+const UserModel = require('../models/UserModel')
 
 class MongoDataSource extends DataSource {
 
@@ -32,6 +33,26 @@ class MongoDataSource extends DataSource {
         return 
     }
 
+    /**
+     * @description Adds a new user to the MongoDB
+     * @param {UserModel} user
+     */
+   addUser(user){
+      return UserModel.create(user).then(user => {
+           console.log("User added")
+       }).catch(err => {
+           console.log("error")
+           console.log(err)
+       })
+   }
+
+    /**
+     * @description Gets the users from the MongoDB
+     * @param {UserModel} user
+     */
+    getUsers(){
+        return UserModel.find();
+    }
 }
 
 
