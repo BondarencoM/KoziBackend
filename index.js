@@ -1,6 +1,6 @@
 require('dotenv').config()
 const { ApolloServer, gql } = require('apollo-server-express');
-// const {authenticateJWT} = require('./middlewares/jwtAuth');
+const authenticateJWT = require('./middlewares/jwtAuth');
 const express = require('express');
 const InfluxDataSource = require('./data_sources/InfluxdbDataSource');
 const typeDefs = require('./graphql/schema');
@@ -33,13 +33,9 @@ const server = new ApolloServer({
 });
 
 const app = express();
+app.use(bodyParser.json());
 
 server.applyMiddleware({ app });
-
-// Example how to use the middleware in speciifc routes
-// app.get('/users', authenticateJWT, (req, res) => {
-//     Do things
-// });
 
 const books = [
     {
@@ -68,29 +64,35 @@ const books = [
     },
 ];
 
-const accessTokenSecret = 'thisshouldbestoredintheenvbutisokayfornow';
-
-const authenticateJWT = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
-
-        jwt.verify(token, accessTokenSecret, (err, user) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-
-            req.user = user;
-            next();
-        });
-    } else {
-        res.sendStatus(401);
-    }
-};
-
 app.get('/books', authenticateJWT, (req, res) => {
     res.json(books);
+});
+
+const users = [
+    {
+        username: 'john',
+        password: 'password123admin',
+        role: 'admin'
+    }, {
+        username: 'anna',
+        password: 'password123member',
+        role: 'member'
+    }
+];
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const user = users.find(u => { return u.username === username && u.password === password });
+
+    if (user) {
+        const accessToken = jwt.sign({ username: user.username,  role: user.role }, process.env.JWT_SIGNING_SECRET);
+
+        res.json({
+            accessToken
+        });
+    } else {
+        res.send('Username or password incorrect');
+    }
 });
 
 app.listen({ port: 4000 }, () =>
