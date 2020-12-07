@@ -1,12 +1,12 @@
 require('dotenv').config()
-const { ApolloServer } = require('apollo-server');
-const InfluxDataSource = require('./data_sources/InfluxdbDataSource');
-const typeDefs = require('./graphql/schema');
+const { ApolloServer } = require('apollo-server')
+const InfluxDataSource = require('./data_sources/InfluxdbDataSource')
+const typeDefs = require('./graphql/schema')
 const resolvers = require('./graphql/resolvers')
-const MongoDataSource = require('./data_sources/mongoDataSource');
+const MongoDataSource = require('./data_sources/MongoDataSource')
 
-const INFLUX_CONFIG = {    
-  url: process.env.INFLUX_HOST, 
+const INFLUX_CONFIG = {
+  url: process.env.INFLUX_HOST,
   token: process.env.INFLUX_TOKEN,
   organization: process.env.INFLUX_ORGANIZATION,
   bucket: process.env.INFLUX_BUCKET,
@@ -24,10 +24,10 @@ const server = new ApolloServer({
   resolvers,
   dataSources: () => ({
     mongodb: new MongoDataSource(MONGO_CONFIG),
-    influx: new InfluxDataSource(INFLUX_CONFIG),  
+    influx: new InfluxDataSource(INFLUX_CONFIG),
   })
-});
+})
 
-server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}graphql`);
-});
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+  console.log(`Server ready at ${url}graphql`)
+})
