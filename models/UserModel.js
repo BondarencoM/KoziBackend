@@ -42,5 +42,9 @@ userModelSchema.methods.comparePassword = function (candidatePassword, cb) {
     });
 };
 
+userModelSchema.methods.comparePasswordAsync = function (candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
+}
+
 
 module.exports = mongoose.model('UserModel', userModelSchema, "users")
