@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,9 +13,11 @@
     "@influxdata/influxdb-client": "^1.6.0",
     "apollo-server": "^2.18.1",
     "apollo-server-express": "^2.19.0",
+    "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "graphql": "^15.3.0",
+    "inquirer": "^7.3.3",
     "mongoose": "^5.10.13"
   },
   "devDependencies": {

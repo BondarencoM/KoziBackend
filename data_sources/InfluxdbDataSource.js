@@ -22,7 +22,9 @@ class InfuxDataService extends DataSource {
         const query = flux`
         from(bucket: "${this.bucket}") 
         |> range(start: ${fluxDuration(start)}, stop: ${fluxDuration(end)})
-        |> filter(fn: (r) => (r._measurement == "climate") and (r._field == "temperature" or r._field == "humidity"))
+        |> filter(fn: (r) => (r._measurement == "climate") 
+                            and (r._field == "temperature" or r._field == "humidity")
+                            and r.is_valid == "true" )
         |> mean()
         |> group(columns: ["floor", "loc_x", "loc_y"])
         `
