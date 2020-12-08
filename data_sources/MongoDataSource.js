@@ -37,7 +37,10 @@ class MongoDataSource extends DataSource {
       return UserModel.create(user).then(user => {
            console.log("User added")
        }).catch(err => {
-           console.log("error")
+           if (err.code === 11000) {
+               console.log("Email already in use")
+               return
+           }
            console.log(err)
        })
    }
