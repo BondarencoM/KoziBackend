@@ -18,6 +18,7 @@ type SensorFault {
     loc_y: Int!
     floor: Int!
     timestamp: Date
+    fault_code: String!
 }
 
 type AuthenticationResponse{

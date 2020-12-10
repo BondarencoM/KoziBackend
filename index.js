@@ -8,7 +8,6 @@ const MongoDataSource = require('./data_sources/mongoDataSource');
 const bodyParser = require('body-parser');
 const jwtService = require('./services/jwtService')
 
-
 const INFLUX_CONFIG = {
   url: process.env.INFLUX_HOST,
   token: process.env.INFLUX_TOKEN,
@@ -37,7 +36,7 @@ const server = new ApolloServer({
     }
     return {user}
   }
-});
+})
 
 const app = express();
 app.use(bodyParser.json());
