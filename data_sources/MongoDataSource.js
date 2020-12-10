@@ -26,7 +26,13 @@ class MongoDataSource extends DataSource {
             }
 
         })
- 
+
+    }
+
+    getUserByEmail(email){
+        return UserModel.findOne({
+            "email": email
+        })
     }
 
     /**
