@@ -1,5 +1,6 @@
 require('dotenv').config()
-const { ApolloServer } = require('apollo-server')
+const { ApolloServer, gql } = require('apollo-server-express')
+const express = require('express')
 const InfluxDataSource = require('./data_sources/InfluxdbDataSource')
 const typeDefs = require('./graphql/schema')
 const resolvers = require('./graphql/resolvers')
@@ -28,6 +29,12 @@ const server = new ApolloServer({
   })
 })
 
-server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
-  console.log(`Server ready at ${url}graphql`)
-})
+const app = express()
+
+server.applyMiddleware({ app })
+
+const port = process.env.PORT || 4000
+
+app.listen({ port }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+)
