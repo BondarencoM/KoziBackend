@@ -7,7 +7,7 @@ type SensorMeasurement{
     loc_x: Int!
     loc_y: Int!
     temperature: Float!
-    humidity: Float!    
+    humidity: Float!
 }
 
 scalar Date
@@ -18,13 +18,19 @@ type SensorFault {
     loc_y: Int!
     floor: Int!
     timestamp: Date
+    fault_code: String!
+}
+
+type AuthenticationResponse{
+    accessToken: String
+    error: String
 }
 
 type Query {
     MeanClimateMeasurements(start: String, stop: String): [SensorMeasurement]!
     SensorFaults: [SensorFault!]!
+    Login(email: String, password: String): AuthenticationResponse
 }
 `
-
 
 module.exports = typeDefs
