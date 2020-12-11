@@ -4,7 +4,7 @@ const MongoDataSource = require('../data_sources/MongoDataSource')
 let mongodb = new MongoDataSource({})
 
 beforeAll(async () => {
-    const full_url = process.env.MONGO_URL.split('/').slice(0, -1).join('/') + '/' + global.MONGO_DB_NAME
+    const full_url = process.env.MONGO_URL.split('/').slice(0, -1).join('/') + '/' + global.__MONGO_DB_NAME__
     await mongoose.connect(full_url, {
         useNewUrlParser: true,
         useCreateIndex: true,

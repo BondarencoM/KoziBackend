@@ -5,7 +5,8 @@ const SALT_WORK_FACTOR = 10;
 const userModelSchema = mongoose.Schema({
     email: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     password: {
         type: String,

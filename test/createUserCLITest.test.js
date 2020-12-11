@@ -1,14 +1,33 @@
-const {validateEmail,validatePassword} = require('../CLI/validation')
+const {
+    validateEmail,
+    validatePassword,
+    checkDomain
+} = require('../CLI/validation')
 const commander = require('commander')
 
 it('Checks the incorrect email input', async () => {
-        const result = await validateEmail('blah');
-        expect(result).toBe('Please enter a valid email');
+    const result = await validateEmail('blah');
+    expect(result).toBe('Please enter a valid email');
 });
 
-it('Checks the correct email input', async () => {
-    const result = await validateEmail('test@gmail.com');
+it('Checks the email input with correct domain', async () => {
+    const result = await validateEmail('test@Isaac.nl');
     expect(result).toBe(true);
+});
+
+it('Checks the email input with incorrect domain', async () => {
+    const result = await validateEmail('test@gamil.com');
+    expect(result).toBe("Wrong domain name");
+});
+
+it('Checks the email input with incorrect domain #2', async () => {
+    const result = await validateEmail('test@Isaac2.nl');
+    expect(result).toBe("Wrong domain name");
+});
+
+it('Checks the email input with incorrect domain #3', async () => {
+    const result = await validateEmail('test@Isaac.nll');
+    expect(result).toBe("Wrong domain name");
 });
 
 it('Checks the empty email input', async () => {
@@ -31,6 +50,16 @@ it('Checks the empty password input', async () => {
     expect(result).toBe('Password field should not be empty');
 });
 
+it('Checks the email with incorrect domain name', async () => {
+    const result = await checkDomain('blah');
+    expect(result).toBe(false);
+});
+
+it('Checks the email with correct domain name', async () => {
+    const result = await checkDomain('@Isaac.nl');
+    expect(result).toBe(true);
+});
+
 test('when .action called then command passed to action', () => {
     const actionMock = jest.fn();
     const program = new commander.Command();
@@ -39,4 +68,4 @@ test('when .action called then command passed to action', () => {
         .action(actionMock);
     program.parse(['node', 'test', 'add']);
     expect(actionMock).toHaveBeenCalledWith(cmd);
-}); 
+});
