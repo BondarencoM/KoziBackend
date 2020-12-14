@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 const {
     SensorFault
 } = require('../models/sensorfault')
@@ -23,7 +23,7 @@ afterAll(async () => {
 beforeEach(async () => {
     mongodb = new MongoDataSource({})
     for (const key in mongoose.connection.collections) {
-        await mongoose.connection.collections[key].deleteMany();
+        await mongoose.connection.collections[key].deleteMany()
     }
 })
 
@@ -37,11 +37,11 @@ test('test of reading the entry with timestamp', async () => {
         timestamp: Date.now()
     })
 
-    await sensorEntry.save();
-    const entries = await mongodb.sensorFaultsFromToday();
-    expect(entries[0].toObject()).toEqual(sensorEntry.toObject());
+    await sensorEntry.save()
+    const entries = await mongodb.sensorFaultsFromToday()
+    expect(entries[0].toObject()).toEqual(sensorEntry.toObject())
 
-});
+})
 
 test('test of reading the entry with past timestamp', async () => {
 
@@ -52,55 +52,55 @@ test('test of reading the entry with past timestamp', async () => {
         timestamp: new Date("December 12, 2015 12:00:00")
     })
 
-    await sensorEntry.save();
-    const entries = await mongodb.sensorFaultsFromToday();
-    expect(entries.length).toBe(0);
+    await sensorEntry.save()
+    const entries = await mongodb.sensorFaultsFromToday()
+    expect(entries.length).toBe(0)
 
-});
+})
 
 test('test of adding user to the mongodb through addUser() method', async () => {
 
     const testUser = new UserModel({
         email: 'test@gmail.com',
         password: '12345678Test'
-    });
+    })
 
     const randomUser = new UserModel({
         email: 'randomUser@gmail.com',
         password: '12345678Test'
-    });
-    
+    })
 
-    await mongodb.addUser(testUser);
-    
-  
-    const expected = await UserModel.findOne({email: 'test@gmail.com'})
-    expect(expected.toObject()).toEqual(testUser.toObject());
-    expect(expected.toObject()).not.toEqual(randomUser.toObject());
-  
 
-});
+    await mongodb.addUser(testUser)
+
+
+    const expected = await UserModel.findOne({ email: 'test@gmail.com' })
+    expect(expected.toObject()).toEqual(testUser.toObject())
+    expect(expected.toObject()).not.toEqual(randomUser.toObject())
+
+
+})
 
 test('test of getting user from the mongodb through getUser() method', async () => {
 
     const testUser = new UserModel({
         email: 'test@gmail.com',
         password: '12345678Test'
-    });
+    })
 
     const randomUser = new UserModel({
         email: 'randomUser@gmail.com',
         password: '12345678Test'
-    });
+    })
 
-    await testUser.save();
+    await testUser.save()
 
-    const expected = await mongodb.getUsers();
-    expect(expected[0].toObject()).not.toEqual(randomUser.toObject());
-    expect(expected[0].toObject()).toEqual(testUser.toObject());
-    
+    const expected = await mongodb.getUsers()
+    expect(expected[0].toObject()).not.toEqual(randomUser.toObject())
+    expect(expected[0].toObject()).toEqual(testUser.toObject())
 
-});
+
+})
 
 
 
