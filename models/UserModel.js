@@ -5,7 +5,8 @@ const SALT_WORK_FACTOR = 10;
 const userModelSchema = mongoose.Schema({
     email: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     password: {
         type: String,
@@ -41,6 +42,10 @@ userModelSchema.methods.comparePassword = function (candidatePassword, cb) {
         cb(null, isMatch);
     });
 };
+
+userModelSchema.methods.comparePasswordAsync = function (candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
+}
 
 
 module.exports = mongoose.model('UserModel', userModelSchema, "users")
