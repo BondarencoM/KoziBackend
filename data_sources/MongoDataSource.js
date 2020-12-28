@@ -46,6 +46,10 @@ class MongoDataSource extends DataSource {
     });
   }
 
+  getAllMaintenanceSensors() {
+    return SensorMaintenance.find();
+  }
+
   removeMaintenanceSensor({ loc_x, loc_y, floor }) {
     return SensorMaintenance.deleteOne({
       loc_x: loc_x,

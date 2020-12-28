@@ -1,6 +1,9 @@
 const { SensorFault } = require('../models/sensorfault');
 const { login } = require('../services/userService');
-const { setMaintenanceMode } = require('../services/maintenanceService');
+const {
+  setMaintenanceMode,
+  getAll,
+} = require('../services/maintenanceService');
 
 module.exports = {
   Query: {
@@ -9,6 +12,7 @@ module.exports = {
     SensorFaults: (_, __, { dataSources }) =>
       dataSources.mongodb.sensorFaultsFromToday(),
     Login: login,
+    SensorMaintenance: getAll,
   },
   Mutation: {
     SetMaintenanceMode: setMaintenanceMode,

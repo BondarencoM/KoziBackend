@@ -12,4 +12,7 @@ const setMaintenanceMode = async (_, { input }, { dataSources }) => {
   }
   return false;
 };
-module.exports = { setMaintenanceMode };
+const getAll = async (_, __, { dataSources }) =>
+  await dataSources.mongodb.getAllMaintenanceSensors();
+
+module.exports = { setMaintenanceMode, getAll };

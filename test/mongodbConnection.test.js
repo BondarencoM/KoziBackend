@@ -131,6 +131,31 @@ test('should get an existing sensor from the database', async () => {
   );
 });
 
+test('should get all sensors from the database', async () => {
+  const maintenanceSensor1 = await new SensorMaintenance({
+    loc_x: 11,
+    loc_y: 12,
+    floor: 3,
+  }).save();
+  await new SensorMaintenance({
+    loc_x: 12,
+    loc_y: 12,
+    floor: 3,
+  }).save();
+  await new SensorMaintenance({
+    loc_x: 13,
+    loc_y: 12,
+    floor: 3,
+  }).save();
+
+  const expectedResult = await mongodb.getAllMaintenanceSensors();
+
+  expect(expectedResult.length).toEqual(await SensorMaintenance.count());
+  expect(expectedResult[0].loc_x).toEqual(maintenanceSensor1.loc_x);
+  expect(expectedResult[0].loc_y).toEqual(maintenanceSensor1.loc_y);
+  expect(expectedResult[0].floor).toEqual(maintenanceSensor1.floor);
+});
+
 test('should add maintenance sensor into the database', async () => {
   const newMaintenanceSensor = {
     loc_x: 12,
