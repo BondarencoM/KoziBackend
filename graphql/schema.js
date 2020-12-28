@@ -22,12 +22,9 @@ const typeDefs = gql`
   }
 
   type SensorMaintenance {
-    id: ID!
     loc_x: Int!
     loc_y: Int!
     floor: Int!
-    timestamp: Date
-    isInMaintenance: Boolean!
   }
 
   type AuthenticationResponse {
@@ -40,6 +37,17 @@ const typeDefs = gql`
     SensorFaults: [SensorFault!]!
     SensorMaintenance: [SensorMaintenance!]!
     Login(email: String, password: String): AuthenticationResponse
+  }
+
+  type Mutation {
+    SetMaintenanceMode(input: MaintenanceInput!): Boolean
+  }
+
+  input MaintenanceInput {
+    loc_x: Int!
+    loc_y: Int!
+    floor: Int!
+    isInMaintenance: Boolean!
   }
 `;
 

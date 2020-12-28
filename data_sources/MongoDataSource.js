@@ -1,66 +1,90 @@
 const { DataSource } = require('apollo-datasource');
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const { SensorFault } = require('../models/sensorfault');
-const UserModel = require('../models/UserModel')
+const { SensorMaintenance } = require('../models/SensorMaintenance');
+const UserModel = require('../models/UserModel');
 
 class MongoDataSource extends DataSource {
-
-    constructor({MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB,MONGO_HOST}) {
-        super()
-        if (mongoose.connection.readyState === 0 && !process.env.MONGO_URL) {
-            mongoose.connect(`mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority`, {
-                useNewUrlParser: true
-            });
-            const db = mongoose.connection;
-            db.on('error', console.error.bind(console, 'connection error:'));
-            db.once('open', () => {
-                console.log('MongoDb connected')
-            });
+  constructor({ MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB, MONGO_HOST }) {
+    super();
+    if (mongoose.connection.readyState === 0 && !process.env.MONGO_URL) {
+      mongoose.connect(
+        `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority`,
+        {
+          useNewUrlParser: true,
         }
+      );
+      const db = mongoose.connection;
+      db.on('error', console.error.bind(console, 'connection error:'));
+      db.once('open', () => {
+        console.log('MongoDb connected');
+      });
     }
+  }
 
-    sensorFaultsFromToday(){
-        return SensorFault.find({
-            "timestamp": {
-                $gte: new Date - 1000 * 60 * 60 * 24
-            }
+  sensorFaultsFromToday() {
+    return SensorFault.find({
+      timestamp: {
+        $gte: new Date() - 1000 * 60 * 60 * 24,
+      },
+    });
+  }
 
-        })
+  addMaintenanceSensor({ loc_x, loc_y, floor }) {
+    return new SensorMaintenance({
+      loc_x: loc_x,
+      loc_y: loc_y,
+      floor: floor,
+    }).save();
+  }
 
-    }
+  getMaintenanceSensor({ loc_x, loc_y, floor }) {
+    return SensorMaintenance.findOne({
+      loc_x: loc_x,
+      loc_y: loc_y,
+      floor: floor,
+    });
+  }
 
-    getUserByEmail(email){
-        return UserModel.findOne({
-            "email": email
-        })
-    }
+  removeMaintenanceSensor({ loc_x, loc_y, floor }) {
+    return SensorMaintenance.deleteOne({
+      loc_x: loc_x,
+      loc_y: loc_y,
+      floor: floor,
+    });
+  }
 
-    /**
-     * @description Adds a new user to the MongoDB
-     * @param {UserModel} user
-     */
-   addUser(user){
-      return UserModel.create(user).then(user => {
-           console.log("User added")
-       }).catch(err => {
-           if (err.code === 11000) {
-               console.log("Email already in use")
-               return
-           }
-           console.log(err)
-       })
-   }
+  getUserByEmail(email) {
+    return UserModel.findOne({
+      email: email,
+    });
+  }
 
-    /**
-     * @description Gets the users from the MongoDB
-     * @param {UserModel} user
-     */
-    getUsers(){
-        return UserModel.find();
-    }
+  /**
+   * @description Adds a new user to the MongoDB
+   * @param {UserModel} user
+   */
+  addUser(user) {
+    return UserModel.create(user)
+      .then((user) => {
+        console.log('User added');
+      })
+      .catch((err) => {
+        if (err.code === 11000) {
+          console.log('Email already in use');
+          return;
+        }
+        console.log(err);
+      });
+  }
+
+  /**
+   * @description Gets the users from the MongoDB
+   * @param {UserModel} user
+   */
+  getUsers() {
+    return UserModel.find();
+  }
 }
-
-
-
 
 module.exports = MongoDataSource;
