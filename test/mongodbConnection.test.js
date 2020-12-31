@@ -102,5 +102,68 @@ test('test of getting user from the mongodb through getUser() method', async () 
 
 })
 
+test('test of updateUserPassword method - providing new password', async () => {
+
+    const testUser = new UserModel({
+        email: 'test2@Isaac.nl',
+        password: '12345678Test'
+    })
+
+    await testUser.save()
+
+    await mongodb.updateUserPassword(testUser.email, "87654321Test")
+    const expected = await UserModel.findOne({ email: testUser.email })
+    expect(await expected.comparePasswordAsync('87654321Test')).toBe(true)
+
+})
+
+test('test of updateUserPassword method - providing old password', async () => {
+
+    const testUser = new UserModel({
+        email: 'test2@Isaac.nl',
+        password: '12345678Test'
+    })
+
+    await testUser.save()
+
+    await mongodb.updateUserPassword(testUser.email, "87654321Test")
+    const expected = await UserModel.findOne({ email: testUser.email })
+    expect(await expected.comparePasswordAsync('12345678Test')).toBe(false)
+
+})
+test('test of getUserByEmail method - matching email', async () => {
+
+    const testUser = new UserModel({
+        email: 'test2@Isaac.nl',
+        password: '12345678Test'
+    })
+
+    await testUser.save()
+
+    const expected = await mongodb.getUserByEmail(testUser.email)
+    expect(expected.email).toEqual(testUser.email)
+
+})
+
+test('test of getUserByEmail method - wrong email', async () => {
+
+    const testUser = new UserModel({
+        email: 'test2@Isaac.nl',
+        password: '12345678Test'
+    })
+
+    const testUser2 = new UserModel({
+        email: 'test11@Isaac.nl',
+        password: '12345678Test'
+    })
+
+    await testUser.save()
+    await testUser2.save()
+
+    const expected = await mongodb.getUserByEmail(testUser2.email)
+    expect(expected.email).not.toEqual(testUser.email)
+
+})
+
 
 
