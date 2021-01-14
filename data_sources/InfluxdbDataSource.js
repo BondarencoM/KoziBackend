@@ -1,8 +1,9 @@
-const { DataSource } = require('apollo-datasource');
-const { InfluxDB, flux, fluxDuration } = require('@influxdata/influxdb-client')
+const { DataSource } = require('apollo-datasource')
+const { InfluxDB, flux, fluxDuration, fluxInteger, fluxString } = require('@influxdata/influxdb-client')
 const SensorMeasurement = require('../models/SensorMeasurement')
-const arrrayUtils = require('../utils/arrayUntils');
-const { LoneSchemaDefinitionRule } = require('graphql');
+const arrrayUtils = require('../utils/arrayUntils')
+const { LoneSchemaDefinitionRule } = require('graphql')
+const SensorTemperatureRecord = require('../models/SensorTemperatureRecord')
 
 class InfuxDataService extends DataSource {
 
@@ -40,8 +41,26 @@ class InfuxDataService extends DataSource {
             .then(this.sensorReducer)
     }
 
-    groupByTable(array) { 
-        return arrrayUtils.groupBy(array, 'table') 
+    /**
+     * This method returns the temperature measurements for one specific sensor in a specified time frame 
+     */
+    async getAllTemperatureValues({ start = '-3d', end = '0m', floor, loc_x, loc_y } = {}) {
+        const query = flux`
+        from(bucket: "${this.bucket}") 
+        |> range(start: ${fluxDuration(start)}, stop: ${fluxDuration(end)})
+        |> filter(fn: (r) => (r._measurement == "climate") 
+                                and (r._field == "temperature") 
+                                and (r.floor == ${fluxString(floor)})  
+                                and (r.loc_x == ${fluxString(loc_x)}) 
+                                and (r.loc_y == ${fluxString(loc_y)})) 
+        `
+        let result = await this.queryApi.collectRows(query)
+        let records = result.map(e => new SensorTemperatureRecord(e))
+        return records
+    }
+
+    groupByTable(array) {
+        return arrrayUtils.groupBy(array, 'table')
     }
 
     sensorReducer(measurements) {
