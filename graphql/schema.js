@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server')
 
 // define Graphql schema
 const typeDefs = gql`
@@ -8,6 +8,12 @@ const typeDefs = gql`
     loc_y: Int!
     temperature: Float!
     humidity: Float!
+  }
+
+  type SensorTemperatureRecord {
+    value: Float!
+    datetime: Date!
+    is_valid: Boolean
   }
 
   scalar Date
@@ -37,6 +43,7 @@ const typeDefs = gql`
     SensorFaults: [SensorFault!]!
     SensorMaintenance: [SensorMaintenance!]!
     Login(email: String, password: String): AuthenticationResponse
+    AllTemperatureMeasurements(start: String, stop: String, floor: Int!, loc_x: Int!, loc_y: Int!): [SensorTemperatureRecord]!
   }
 
   type Mutation {
@@ -49,6 +56,6 @@ const typeDefs = gql`
     floor: Int!
     isInMaintenance: Boolean!
   }
-`;
+`
 
-module.exports = typeDefs;
+module.exports = typeDefs
