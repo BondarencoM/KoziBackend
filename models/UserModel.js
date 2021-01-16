@@ -36,6 +36,16 @@ userModelSchema.pre('save', function (next) {
 
 });
 
+userModelSchema.pre('findOneAndUpdate', async function (next) {
+    var user = this;
+
+    if (user._update.$set.password) {
+        user._update.$set.password = await bcrypt.hash(user._update.$set.password, 8);
+    }
+    next();
+
+});
+
 userModelSchema.methods.comparePassword = function (candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
         if (err) return cb(err);
