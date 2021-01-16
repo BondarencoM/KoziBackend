@@ -58,6 +58,26 @@ class MongoDataSource extends DataSource {
     });
   }
 
+    /**
+     * @description Gets the users from the MongoDB
+     * @param {UserModel} user
+     */
+    getUsers(){
+        return UserModel.find();
+    }
+
+    /**
+     * @description Updates the password field of the user
+     * @param {UserModel} user
+     */
+    async updateUserPassword(email,password) {
+        await UserModel.findOneAndUpdate({email: email}, {$set:{password:password}})
+        console.log("Password Changed")
+        
+    }
+}
+
+
   getUserByEmail(email) {
     return UserModel.findOne({
       email: email,

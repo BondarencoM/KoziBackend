@@ -109,3 +109,35 @@ test('UserModel validates password as required', async () => {
 
     await expect(testUser.save()).rejects.toThrow(/validation failed.*password.*is required.*/i)
 })
+
+test('test of comparePasswordAsync method - matching password', async () => {
+
+    const testUser = new UserModel({
+        email: 'test@gmail.com',
+        password: '12345678Test'
+    })
+
+    await testUser.save()
+
+    const expected = await UserModel.findOne({
+        email: testUser.email
+    })
+
+    expect(await expected.comparePasswordAsync('12345678Test')).toBe(true)
+})
+
+test('test of comparePasswordAsync method - failing password', async () => {
+
+    const testUser = new UserModel({
+        email: 'test@gmail.com',
+        password: '12345678Test'
+    })
+
+    await testUser.save()
+
+    const expected = await UserModel.findOne({
+        email: testUser.email
+    })
+
+    expect(await expected.comparePasswordAsync('qwerqerqwerq')).toBe(false)
+})

@@ -1,6 +1,6 @@
 const {validateEmail,validatePassword} = require('./validation')
 /**
- * User Questions
+ * Questions for creating user
  */
 const questions = [{
         type: 'input',
@@ -17,4 +17,33 @@ const questions = [{
     }
 ]
 
-module.exports = questions
+/**
+ * Questions for account verification
+ */
+const verification_questions = [{
+        type: 'input',
+        name: 'email',
+        message: 'Enter the email:',
+    },
+    {
+        type: 'password',
+        name: 'password',
+        message: 'Enter the password:',
+        mask: "*",
+        validate: validatePassword
+    }
+]
+
+/**
+ * Questions for changing password
+ */
+const password_questions = [{
+        type: 'password',
+        name: 'password',
+        message: 'Enter the new password:',
+        mask: "*",
+        validate: validatePassword
+    },
+]
+
+module.exports = {questions, verification_questions,password_questions}
